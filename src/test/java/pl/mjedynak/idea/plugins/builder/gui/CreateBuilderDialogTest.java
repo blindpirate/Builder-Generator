@@ -52,12 +52,13 @@ public class CreateBuilderDialogTest {
         className = "className";
         String methodPrefix = "with";
         String packageName = "packageName";
+        String initMethodName = "aClassName";
         given(targetPackage.getQualifiedName()).willReturn(packageName);
         given(referenceEditorComboWithBrowseButtonFactory.getReferenceEditorComboWithBrowseButton(
                 project, packageName, CreateBuilderDialog.RECENTS_KEY)).willReturn(referenceEditorComboWithBrowseButton);
 
         createBuilderDialog = new CreateBuilderDialog(
-                project, title, sourceClass, className, methodPrefix, targetPackage, psiHelper, guiHelper, referenceEditorComboWithBrowseButtonFactory);
+                project, title, sourceClass, className, methodPrefix, initMethodName, targetPackage, psiHelper, guiHelper, referenceEditorComboWithBrowseButtonFactory);
     }
 
 

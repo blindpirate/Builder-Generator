@@ -52,6 +52,7 @@ public class CreateBuilderDialog extends DialogWrapper {
     private PsiClass sourceClass;
     private JTextField targetClassNameField;
     private JTextField targetMethodPrefix;
+    private JTextField targetInitMethodNameField;
     private JCheckBox innerBuilder;
     private JCheckBox butMethod;
     private ReferenceEditorComboWithBrowseButton targetPackageField;
@@ -61,6 +62,7 @@ public class CreateBuilderDialog extends DialogWrapper {
                                PsiClass sourceClass,
                                String targetClassName,
                                String methodPrefix,
+                               String initMethodName,
                                PsiPackage targetPackage,
                                PsiHelper psiHelper,
                                GuiHelper guiHelper,
@@ -72,8 +74,10 @@ public class CreateBuilderDialog extends DialogWrapper {
         this.sourceClass = sourceClass;
         targetClassNameField = new JTextField(targetClassName);
         targetMethodPrefix = new JTextField(methodPrefix);
+        targetInitMethodNameField = new JTextField(initMethodName);
         setPreferredSize(targetClassNameField);
         setPreferredSize(targetMethodPrefix);
+        setPreferredSize(targetInitMethodNameField);
 
         String targetPackageName = (targetPackage != null) ? targetPackage.getQualifiedName() : "";
         targetPackageField = referenceEditorComboWithBrowseButtonFactory.getReferenceEditorComboWithBrowseButton(project, targetPackageName, RECENTS_KEY);
@@ -125,7 +129,27 @@ public class CreateBuilderDialog extends DialogWrapper {
                 getOKAction().setEnabled(JavaPsiFacade.getInstance(project).getNameHelper().isIdentifier(getClassName()));
             }
         });
-        // Class name
+        // Builder init method name
+        gbConstraints.insets = new Insets(4, 8, 4, 8);
+        gbConstraints.gridx = 0;
+        gbConstraints.weightx = 0;
+        gbConstraints.gridwidth = 1;
+        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gbConstraints.anchor = GridBagConstraints.WEST;
+        panel.add(new JLabel("Init method name"), gbConstraints);
+
+        gbConstraints.insets = new Insets(4, 8, 4, 8);
+        gbConstraints.gridx = 1;
+        gbConstraints.weightx = 1;
+        gbConstraints.gridwidth = 1;
+        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gbConstraints.anchor = GridBagConstraints.WEST;
+        panel.add(targetInitMethodNameField, gbConstraints);
+        targetInitMethodNameField.getDocument().addDocumentListener(new DocumentAdapter() {
+            protected void textChanged(DocumentEvent e) {
+                getOKAction().setEnabled(JavaPsiFacade.getInstance(project).getNameHelper().isIdentifier(getClassName()));
+            }
+        });
 
         // Method prefix
         gbConstraints.insets = new Insets(4, 8, 4, 8);
@@ -267,6 +291,10 @@ public class CreateBuilderDialog extends DialogWrapper {
 
     public String getMethodPrefix() {
         return targetMethodPrefix.getText();
+    }
+
+    public String getInitMethodName(){
+        return targetInitMethodNameField.getText();
     }
 
     public boolean isInnerBuilder() {

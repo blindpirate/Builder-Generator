@@ -49,21 +49,22 @@ public class DisplayChoosersRunnable implements Runnable {
             PsiDirectory targetDirectory = createBuilderDialog.getTargetDirectory();
             String className = createBuilderDialog.getClassName();
             String methodPrefix = createBuilderDialog.getMethodPrefix();
+            String initMethodName = createBuilderDialog.getInitMethodName();
             boolean innerBuilder = createBuilderDialog.isInnerBuilder();
             List<PsiElementClassMember> fieldsToDisplay = getFieldsToIncludeInBuilder(psiClassFromEditor, innerBuilder);
             MemberChooser<PsiElementClassMember> memberChooserDialog = memberChooserDialogFactory.getMemberChooserDialog(fieldsToDisplay, project);
             memberChooserDialog.show();
-            writeBuilderIfNecessary(targetDirectory, className, methodPrefix, memberChooserDialog, createBuilderDialog);
+            writeBuilderIfNecessary(targetDirectory, className, methodPrefix, initMethodName, memberChooserDialog, createBuilderDialog);
         }
     }
 
     private void writeBuilderIfNecessary(
-            PsiDirectory targetDirectory, String className, String methodPrefix, MemberChooser<PsiElementClassMember> memberChooserDialog, CreateBuilderDialog createBuilderDialog) {
+            PsiDirectory targetDirectory, String className, String methodPrefix,String initMethodName, MemberChooser<PsiElementClassMember> memberChooserDialog, CreateBuilderDialog createBuilderDialog) {
         if (memberChooserDialog.isOK()) {
             List<PsiElementClassMember> selectedElements = memberChooserDialog.getSelectedElements();
             PsiFieldsForBuilder psiFieldsForBuilder = psiFieldsForBuilderFactory.createPsiFieldsForBuilder(selectedElements, psiClassFromEditor);
             BuilderContext context = new BuilderContext(
-                    project, psiFieldsForBuilder, targetDirectory, className, psiClassFromEditor, methodPrefix, createBuilderDialog.isInnerBuilder(), createBuilderDialog.hasButMethod());
+                    project, psiFieldsForBuilder, targetDirectory, className, psiClassFromEditor, methodPrefix, initMethodName, createBuilderDialog.isInnerBuilder(), createBuilderDialog.hasButMethod());
             builderWriter.writeBuilder(context);
         }
     }

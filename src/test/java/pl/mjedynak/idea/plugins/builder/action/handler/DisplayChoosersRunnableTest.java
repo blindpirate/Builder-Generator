@@ -117,6 +117,7 @@ public class DisplayChoosersRunnableTest {
     public void shouldDisplayCreateBuilderAndMemberChooserDialogAndWriteBuilderWhenOKSelectedFromBothWindows() {
         // given
         String methodPrefix = "with";
+        String initMethodName = "aBuilder";
         boolean isInner = true;
         boolean hasButMethod = true;
         given(createBuilderDialog.isInnerBuilder()).willReturn(isInner);
@@ -139,6 +140,6 @@ public class DisplayChoosersRunnableTest {
         verify(memberChooserDialog).isOK();
         verify(createBuilderDialog).show();
         verify(memberChooserDialog).show();
-        verify(builderWriter).writeBuilder(eq(new BuilderContext(project, psiFieldsForBuilder, psiDirectory, className, psiClassFromEditor, methodPrefix, isInner, hasButMethod)));
+        verify(builderWriter).writeBuilder(eq(new BuilderContext(project, psiFieldsForBuilder, psiDirectory, className, psiClassFromEditor, methodPrefix, initMethodName, isInner, hasButMethod)));
     }
 }

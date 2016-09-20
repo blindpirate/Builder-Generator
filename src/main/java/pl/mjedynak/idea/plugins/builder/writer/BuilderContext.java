@@ -14,18 +14,20 @@ public class BuilderContext {
     private final String className;
     private final PsiClass psiClassFromEditor;
     private final String methodPrefix;
+    private final String initMethodName;
     private final boolean isInner;
     private final boolean hasButMethod;
 
     public BuilderContext(Project project, PsiFieldsForBuilder psiFieldsForBuilder,
                           PsiDirectory targetDirectory, String className, PsiClass psiClassFromEditor,
-                          String methodPrefix, boolean isInner, boolean hasButMethod) {
+                          String methodPrefix, String initMethodName, boolean isInner, boolean hasButMethod) {
         this.project = project;
         this.psiFieldsForBuilder = psiFieldsForBuilder;
         this.targetDirectory = targetDirectory;
         this.className = className;
         this.psiClassFromEditor = psiClassFromEditor;
         this.methodPrefix = methodPrefix;
+        this.initMethodName = initMethodName;
         this.isInner = isInner;
         this.hasButMethod = hasButMethod;
     }
@@ -54,6 +56,10 @@ public class BuilderContext {
         return methodPrefix;
     }
 
+    public String getInitMethodName(){
+        return initMethodName;
+    }
+
     boolean isInner() {
         return isInner;
     }
@@ -64,7 +70,7 @@ public class BuilderContext {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(project, psiFieldsForBuilder, targetDirectory, className, psiClassFromEditor, methodPrefix);
+        return Objects.hashCode(project, psiFieldsForBuilder, targetDirectory, className, psiClassFromEditor, methodPrefix, initMethodName);
     }
 
     @Override

@@ -14,17 +14,12 @@ import pl.mjedynak.idea.plugins.builder.writer.BuilderContext;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
-
-import static com.intellij.openapi.util.text.StringUtil.isVowel;
 
 public class BuilderPsiClassBuilder {
 
     private static final String PRIVATE_STRING = "private";
     private static final String SPACE = " ";
-    private static final String A_PREFIX = " a";
-    private static final String AN_PREFIX = " an";
     private static final String SEMICOLON = ",";
     static final String STATIC_MODIFIER = "static";
     static final String FINAL_MODIFIER = "final";
@@ -37,6 +32,7 @@ public class BuilderPsiClassBuilder {
 
     private PsiClass srcClass = null;
     private String builderClassName = null;
+    private String initMethodName = null;
 
     private List<PsiField> psiFieldsForSetters = null;
     private List<PsiField> psiFieldsForConstructor = null;
@@ -71,6 +67,7 @@ public class BuilderPsiClassBuilder {
         srcClass = context.getPsiClassFromEditor();
         builderClassName = context.getClassName();
         srcClassName = context.getPsiClassFromEditor().getName();
+        initMethodName = context.getInitMethodName();
         srcClassFieldName = StringUtils.uncapitalize(srcClassName);
         psiFieldsForSetters = context.getPsiFieldsForBuilder().getFieldsForSetters();
         psiFieldsForConstructor = context.getPsiFieldsForBuilder().getFieldsForConstructor();
@@ -96,9 +93,8 @@ public class BuilderPsiClassBuilder {
     }
 
     public BuilderPsiClassBuilder withInitializingMethod() {
-        String prefix = isVowel(srcClassName.toLowerCase(Locale.ENGLISH).charAt(0)) ? AN_PREFIX : A_PREFIX;
         PsiMethod staticMethod = elementFactory.createMethodFromText(
-                "public static " + builderClassName + prefix + srcClassName + "() { return new " + builderClassName + "();}", srcClass);
+                "public static " + builderClassName + " " + initMethodName + "() { return new " + builderClassName + "();}", srcClass);
         builderClass.add(staticMethod);
         return this;
     }

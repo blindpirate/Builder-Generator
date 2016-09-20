@@ -62,6 +62,7 @@ public class BuilderPsiClassBuilderTest {
     private String builderClassName = "BuilderClassName";
     private String srcClassName = "ClassName";
     private String srcClassFieldName = "className";
+    private String initMethodName = "aBuilderClassName";
 
     @Before
     public void setUp() {
@@ -77,7 +78,7 @@ public class BuilderPsiClassBuilderTest {
         given(psiFieldsForBuilder.getAllSelectedFields()).willReturn(allSelectedPsiFields);
         given(elementFactory.createClass(builderClassName)).willReturn(builderClass);
         given(builderClass.getModifierList()).willReturn(psiModifierList);
-        context = new BuilderContext(project, psiFieldsForBuilder, targetDirectory, builderClassName, srcClass, "anyPrefix", false, false);
+        context = new BuilderContext(project, psiFieldsForBuilder, targetDirectory, builderClassName, srcClass, "anyPrefix", initMethodName, false, false);
         mockCodeStyleManager();
     }
 
